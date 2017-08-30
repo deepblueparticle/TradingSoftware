@@ -1,0 +1,108 @@
+IMPORTANT
+=========
+
+  1. The NxCoreAPI for linux (libnx.so) is in BETA - !!! USE WITH CAUTION !!!
+  2. If you experience issues or have questions please contact technical support via email at support@nanex.net.
+  3. Please read the Windows release notes, NxCoreAPI~ReleaseNotes.txt, to learn of any global changes to the API.
+  4. Any Linux specific changes have been added to NxCoreAPI~ReleaseNotes~Linux.txt
+
+
+NxCoreAPI Version 3.1.126 (2017-02-16)
+======================================
+
+New Features
+============
+
+     1. Optimized the transition over the midnight rollover allowing for quicker day-to-day access for clients processing U.S. futures. 
+     2. The C and C++ wrappers were re-named to clarify their usage: 
+     
+         C Wrapper:
+         ==========
+         
+           NxCoreLoadLib.h -> NxCoreAPI_Wrapper_C.h
+
+         C++ Wrapper:
+         ============
+            
+           NxCoreAPI_Class.h -> NxCoreAPI_Wrapper_C++.h,
+            
+     3. Previously, the sample wrapper code had the libnx.so value hard coded, now each of the wrappers accepts the libnx.so path as an argument:
+
+         C Wrapper:
+         ==========
+     
+           loadNxCore("/path/to/libnx.so")
+   
+	 C++ Wrapper:
+     	 ============
+     	 
+     	   NxCore.LoadNxCore("/path/to/libnx.so")
+
+
+Fixed Bugs
+==========
+
+     1. Fixed a critical memory issue that was causing the reserved memory space by each call to processTape() to not be released properly.
+
+     2. The libnx.so is now aware of "eastern time" (ET) in respect to the local clock and should now properly sync up shared memory with NxCoreAccess
+        regardless of the timezone of the local machine that is running NxCoreAccess and/or any NxCore based applications that want to use
+        the shared memory for processing data.
+
+
+NxCoreAPI Version 3.1.102 (2016-12-06)
+======================================
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+
+      1. Fixed a critical issue with memory rebasing when processing .nx2 and .nx3 tapes.
+
+Misc Changes
+============
+
+      1. The function pfNxCoreProcessTape (NxCore.ProcessTape for C++)  has been updated such that the UserData variable being passed in must now be an "int",
+         just like on Windows. This decision was made due to the windows API existing nearly a decade before the Linux variant and makes it easier to support testing
+         both implementations.
+
+         !!!CAUTION!!! Users who have NxCore applications that rely the previous "void *" data type will need to make
+         changes to handle the "int" type.  The files NxCoreAPI.h and NxCoreAPI_Class.h have been updated appropriately.
+	 
+	 The typedef for the function NxCoreProcessTape has been restored to match Windows, as seen here:
+
+	 typedef int (__stdcall *NxCoreProcessTape) (const char* pszFilename,const char* pBaseMemory,unsigned int controlFlags,int UserData,NxCoreCallback stdcallback);
+
+
+NxCoreAPI Version 3.1.86 (2016-08-11)
+=====================================
+
+New Features
+============
+	None.
+
+Fixed Bugs
+==========
+	None.
+
+Misc Changes
+============
+
+      1. NxCoreAPI versions for linux will now have an odd minor build number.  For example, 3.1.86 for the
+         linux version, and 3.0.80 for the Windows version.
+      2. The linux NxCoreAPI will now use an NxCoreAPI.h header file instead of NxCoreAPIDU.h.
+
+      
+NxCoreAPI Version 3.0.80 (2016-08-10)
+=====================================
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+
+      1. Split OPRA only tapes should no longer have an issue with symbol spins if a non-OPRA symbol is sent.

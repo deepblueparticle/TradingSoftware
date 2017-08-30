@@ -1,0 +1,515 @@
+IMPORTANT
+=========
+1. NxCoreAPI 3.0.xxx will require a new compile if you would like to get access to the new extended data offered in NxCore3
+
+2. If you experience issues with this update, you can find previous versions of the api
+   in the default location:
+
+     C:\Program Files\Nanex\NxCoreAPI\Version\X.X where X.X is the previous version
+ 
+   We recommend that you copy the specific version of the .dll you want to use to your application's location
+   or link to the .dll in the specific version you know works (e.g. C:\Program Files\Nanex\NxCoreAPI\Version\3.0\NxCoreAPI.dll)
+   instead of linking to the version at the default NxCore API root:
+
+     C:\Program Files\Nanex\NxCoreAPI\
+
+   On 64bit systems, the default install location is:
+
+     C:\Program Files (x86)\Nanex\NxCoreAPI\
+
+   The files in the default NxCore API root will be overwritten automatically on subsequent NxCoreAPI releases.
+
+3. If you experience any issues or have any questions please email:
+
+     support@nanex.net
+
+NxCoreAPI Version 3.0.86 (2016-11-21)
+====================================== 
+
+New Features
+============
+	None.
+
+Fixed Bugs
+==========
+
+      1. Fixed a critical issue with memory rebasing when processing .nx2 and .nx3 tapes. 
+	 
+	 
+NxCoreAPI Version 3.0.80 (2016-08-01)
+====================================== 
+
+New Features
+============
+	None.
+
+Fixed Bugs
+==========
+
+      1. Split OPRA only tapes should no longer have an issue with symbol spins if a non-OPRA symbol is sent.
+
+NxCoreAPI Version 3.0.74 (2016-05-05)
+======================================     
+
+New Features
+============
+	1. NYSE/Nasdaq SIP Equities now contain expanded 4 trade conditions
+
+           NxCoreTrade now has a new member:
+
+              char	ExtTradeConditions[4]; 
+
+           Each of the 4 characters represents the NxCore-mapped trade conditions available in both NYSE's CTA SIP And Nasdaq's UTP SIP.
+           The existing single NxCore field TradeCondition remains the same for backwards compatibility. 
+	   The value 255 (unsigned) denotes "not set" as the value 0 is a valid trade condition.
+           NxCore trade condition 32 which was previously Reserved is now set to RegularSettle.
+
+        2. Support for milliseconds in exchange timestamps
+
+  	   Starting with NxCore v3.0.xxx, NxCore3 now has a secondary tape format denoted by the extension .nx2
+           This format provides the millisecond of the nxExgTimestamp for feeds that provide millisecond resolution.
+           These tapes are roughly 10% larger than the existing .nxc format (which provides 1 second resolution).
+
+        3. Support for SIP, Participant1 and Participant2 timestamps including microsecond resolution
+
+	   Starting with NxCore v3.0.xxx, NxCore3 now has a third tape format denoted by the extension .nx3
+           This format provides the new microsecond resolution available through both NYSE's CTA and Nasdaq's UTP SIPs. 
+           
+           These new timestamps are part of a new structure named "NxCore3Ext" 
+
+              struct NxCore3Ext {
+                // NxCore3 extended microsecond data
+                unsigned __int64	 MicrosOfDaySRC;
+                unsigned __int64	 MicrosOfDayPTP1;
+                unsigned __int64	 MicrosOfDayPTP2;
+                unsigned __int64	 alignment[5];
+              };
+
+          A pointer to this struct was then appended to the bottom of the NxCoreMessage structure:
+
+             NxCore3Ext*  pnxCore3Ext;
+
+          If this pointer has been set, both trades and quotes should contain one or more of the above microsecond resolution timestamps.
+          *Note* other message types (e.g. Categories) might have this pointer set, but the microseconds will be zeroed out
+          Our initial testing shows an increase in tape size by 20-50% depending on the types of data contained in the tapeset.
+
+         4. ListTapes() has been extended to include any of the three varients of NxCore files: *.nxc, *.nx2, *.nx3
+
+         5. Modified read logic when transitioning from disk to in-memory buffers. This should result in a more efficient transition from 
+            disk to in-memory buffers.
+	   
+Fixed Bugs
+==========
+
+      1. While testing the new code, we identified and fixed a potential edge case with our custom allocator.
+
+NxCoreAPI Version 2.9.894 (2015-10-30)
+======================================     
+
+New Features
+============
+	1. NxCoreAPI64.dll ~ 64bit memory address space now available
+
+           Now supports full 64bit addressing. Previously, it was limited to the lower 4GB memory space due to a
+           desire to keep the addresses of millions of pointers limited to 32bits. 
+       
+           Do to the ability to use the full 64bit addressable space, each call to processTape() now reserves 1GB/call to processTape().
+           Previously, it was limited to 512MB to play nicely with the 4GB limit. However with this restriction removed, the 1GB reservation
+           gives us future expansion.
+
+           Removed support of the NxCF_EXCLUDE_OPRA to change the amount of memory reserved. It's now hard set to 1GB for x64.
+
+        2. NxCoreAPI.dll & NxCoreAPI64.dll ~ Performance enhancements
+
+           In preparations to support millisecond and microsecond data, we did another round of performance enhancements. 
+           This round garnered between 10-15% on our internal testing. This performance will vary depending on if you are processing OPRA.
+
+           The first couple minutes of the day, where we pre-allocate a ton of memory should now process ~5x faster. We optimized memory pre-allocation
+           so that the millions of structures required to support OPRA can now initialize much more quickly.
+
+        3. NxCoreAPI.dll & NxCoreAPI64.dll ~ Supports split OPRA data feed
+
+           In an effort to work with customers who process the entire OPRA feed, we have now put in a solution that splits OPRA into 4 separate data feeds.
+           This solution requires 5 NxCoreAccesss instances and due to the implementation to shared memory, it was necessary to update NxCoreAPI/64.dll to
+           accommodate these changes.
+
+Fixed Bugs
+==========
+	1. Fixed and issue dealing with the initial symbol spin when a tapeset was built from an OPRA only data source.
+
+NxCoreAPI Version 2.9.536 (2015-07-01)
+======================================     
+
+New Features
+============
+	1. Using the NxCF_EXCLUDE_OPRA control flag in the processTape() function limits VM reservation to 256MB instead of the 512MB needed for OPRA
+
+
+Fixed Bugs
+==========
+        1. NxMSG_SYMBOLCHANGE ADD messages will now be properly created after a completely new option root is added for the first time. Previously they
+           weren't being set for only the first two contracts of any brand new root symbol creation.
+
+        2. Session dates should now be properly set for futures during a custom SymbolSpin run after 18:00 NxTime. Previously, all symbols in a user
+           defined symbol spin run after 18:00 ET NxTime would have the session date of the current tape's file instead of their own session date.
+
+
+NxCoreAPI Version 2.9.520 (2015-02-28)
+======================================     
+
+New Features
+============
+	1. State File Rebaseing
+
+           Previously, when loading from a state file that couldn't be re-loaded into the EXACT memory address from which it was saved,
+           the application would fail with a NxAPIERR_INITIALIZE_MEMORY_FAILED (-5). We have enhanced the NxCoreAPI so that it will 
+           now attempt to find another chunk of contiguous memory and re-locate itself automatically. However, if it's still unable to find 
+           a suitable contiguous Virtual Memory space anywhere, it will still return NxAPIERR_INITIALIZE_MEMORY_FAILED (-5)
+
+           This scenario was most common on newer versions of windows (Server 2012*, Windows 8.x and above) due to some new mandatory
+           windows security features like ASLR (Address Space Layout Randomization) that was causing windows system .dlls to 
+           be located inside a previously allocated contiguous chunk of memory. This would then result in a state file that could potentially 
+           unusable between system restarts.
+
+           More information on Windows ASLR can be found here:
+
+           https://msdn.microsoft.com/en-us/library/bb430720.aspx
+
+           This scenario was also common for those customers who develop in C# as there is no guarantee that between reserving/releasing
+           a contiguous chunk of memory in C#, that that same chunk of memory would be usable by the time the processTape() function was called.
+
+Fixed Bugs
+==========
+	None.
+
+NxCoreAPI Version 2.9.496 (2015-1-26)
+======================================     
+
+New Features
+============
+	1. Both the 32bit and 64bit .dlls have been moved to a new compiler and compiled using an updated Profile Guided Optimization (PGO)
+           compiled using Visual Studio 2013. These changes have shown between 5-25% performance increase over the previous versions 
+           depending on the makeup of the tapeset.
+
+Fixed Bugs
+==========
+	None.
+
+NxCoreAPI Version 2.9.480 (2015-1-18)
+======================================     
+
+New Features
+============
+	1. Added in windows resource to both x86 and x64 builds to take advantage of the windows properties version window. This should
+           now make it easier to identify the version of the NxCoreAPI you are using by doing the following:
+          
+            i. Right click on the appropriate .dll
+           ii. Properties
+          iii. Details
+           iv. This should now display the same version returned by the APIVersion() function
+
+Fixed Bugs
+==========
+	None.
+
+NxCoreAPI Version 2.9.478 (2014-12-15)
+======================================     
+
+New Features
+============
+	None.
+
+Fixed Bugs
+==========
+	1. Previously, when saving a state file using NxSAVESTATE_ONEPASS. Certain scenarios would cause the state file to be un-loadable. 
+           State files saved with NxSAVESTATE_ONEPASS should now work correctly every time. 
+
+NxCoreAPI Version 2.9.476 (2014-12-08)
+======================================     
+
+New Features
+============
+	None.
+
+Fixed Bugs
+==========
+	1. When returning NxCALLBACKRETURN_RESTART from your NxCore callback function, equities should now properly start a SymbolSpin. 
+           Previously, only Futures and Options would show up in the symbols spin following a NxCALLBACKRETURN_RESTART.
+
+
+NxCoreAPI Version 2.9.472 (2014-11-28) *CRITICAL*
+==================================================     
+
+New Features
+============
+	1. NxCoreAPI.h - added #defines for Limit Up/Limit Down types
+
+Fixed Bugs
+==========
+	1. The previous version introduced a bug that would cause an an error while processing 
+           some valid historic OPRA tapes. This error should no longer occur.
+
+
+NxCoreAPI Version 2.9.470 (2014-10-28)
+======================================     
+
+New Features
+============
+	None.
+
+Fixed Bugs
+==========
+        1. NxCoreAPI.dll (x86)   - VM increased to 512MB to accommodate increase in OPRA symbols.
+        2. NxCoreAPI64.dll (x64) - VM increased to 512MB to accommodate increase in OPRA symbols.
+
+
+NxCoreAPI Version 2.9.464 (2014-04-14)
+======================================     
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+	1. Fixed a rounding issue with PriceTypes 20 and 21
+
+NxCoreAPI Version 2.9.456 (2013-12-06)
+======================================     
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+	1. Fixed an issue with Options symbols showing SpecialSettle being set after underlying Special Settle had been cleared
+
+NxCoreAPI Version 2.9.454 (2013-10-14)
+======================================     
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+	1. Fixed an issue with NxCSSYMBOLSPIN_COMPLETE message not being published correctly with new tape format
+
+NxCoreAPI Version 2.9.452 (2012-06-09)
+======================================     
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+	1. Increased virtual memory in the x64 version of the .dll to accommodate the increase 
+           in the number of options symbols due to mini options contracts being added.
+
+
+NxCoreAPI Version 2.9.450 (2012-05-21)
+======================================     
+
+New Features
+============
+        None.
+
+Fixed Bugs
+==========
+	1. Increased virtual memory in the x86 version of the .dll to accommodate the increase 
+           in the number of options symbols due to mini options contracts being added.
+
+NxCoreAPI Version 2.9.440 (2012-02-18)
+======================================     
+
+New Features
+============
+1. Improved performance when processing 3 character tapesets
+   
+Fixed Bugs
+==========
+	None.
+
+NxCoreAPI Version 2.9.436 (2012-02-08)
+======================================     
+
+New Features
+============
+	None.
+   
+Fixed Bugs
+==========
+1. Fixed an issue processing 3 character tapesets.
+
+
+NxCoreAPI Version 2.9.430 (2012-11-19)
+======================================     
+
+New Features
+============
+1. This includes an update to better handle data from Morningstar.
+   
+Fixed Bugs
+==========
+        None.
+
+
+NxCoreAPI Version 2.9.428 (2012-11-30)
+======================================     
+
+New Features
+============
+        None.
+   
+Fixed Bugs
+==========
+1. Fix an issue with a currupted NxCoreAPIx64.dll  
+     
+NxCoreAPI Version 2.9.426 (2012-11-21)
+======================================     
+
+New Features
+============
+        None.
+   
+Fixed Bugs
+==========
+1. We identified and fixed a rare condition that resulted in a cancled trade setting the last when the RecordsBack resulted in 0     
+     
+NxCoreAPI Version 2.9.420 (2012-09-23)
+======================================     
+
+New Features
+============
+1. We have added 2 new error codes to help track down where memory initialization might be failing:
+
+	#define NxAPIERR_INITALLOC_ERROR  -14 
+	#define NxAPIERR_NSODALLOC_ERROR  -15 
+	
+   These error codes are defined in the NxCoreAPI.h
+   
+Fixed Bugs
+==========
+
+	None.
+
+NxCoreAPI Version 2.9.408 (2012-09-13)
+======================================
+
+*State files will need to be regenerated for use with this version of the NxCoreAPI
+
+New Features
+============
+1. NxCoreAPI64.dll now included in the NxCoreAPI package
+
+2. The NxCoreAPI now supports Bid and Ask sizes above 16 million (max 24bit). The new cap is ~2 billion (max int 32bit)
+
+   This was put in to help support Pink Sheets and other instruments that trade at sub-penny
+   prices who's bid/ask quote size is sometimes in the hundreds of millions.
+
+   *NOTE* Since this changes the internal memory structure while the tape is being processed,
+          any state files generated with a version of the .dll prior to 2.9.400 will NOT work.
+          State files will need to be re-generated with this .dll if you wish to use them.
+
+Fixed Bugs
+==========
+1. The original tape file (.nxc) used to generate state files can now be moved to another drive
+
+Previously, if one had generated a state file using an NxCore tape, any attempts to move the 
+tape file and use the corisponding state files would cause a tape error resulting in 
+error code -4 (file not found). This was due to the state files being a direct dump of memory
+and containing the original location of the tape file that was used to generate them.
+
+Example: 
+
+  Original tape file location: 
+
+    D:\NxCoreData\20120901.IV.nxc
+
+  State files location: 
+
+    D:\NxCoreData\StateFiles
+
+  Drive D:\ is running out of space, if you move the NxCore tapes to a newer bigger drive: 
+
+    E:\NxCoreData
+
+  Trying to use the generated state files results in tape error -4.
+
+The API has been updated to search for the original tape file in other drives on the machine
+under the pattern: <drive letter>:\NxCoreData.
+
+Example: 
+
+  Original tape file location: 
+
+    D:\NxCoreData\20120901.IV.nxc
+
+  State files location: 
+
+    D:\NxCoreData\StateFiles
+
+  Drive D:\ is running out of space, if you move the NxCore tapes to a newer bigger drive:  
+
+    E:\NxCoreData
+
+  This should now work as expected. If the API can't find the tape in the original location, 
+  it will now search for it. If the original tape file has completely been removed or renamed, 
+  you will still receive a -4.
+
+
+NxCoreAPI Version 2.9.316 (2012-08-13)
+======================================
+
+New Features
+============
+1. Max virtual memory increased from 192MB to 320MB
+
+   *NOTE* We have tested generating and loading state tape files with both old and new .dlls
+          since the state files are loaded to the same spot in memory. Tapes created with 
+          the previous version were able to run with no modifications or conversions. However
+          if you do generate state files with the new version, older versions of the API will
+          not be able to open them.
+
+   In order to handle an increase in the number of symbols being processed we have
+   increased the mamximum requested virtual memory from 192MB to 320MB. This allows
+   headroom for a future increase in symbols. Keep this in mind when runing multiple
+   NxCore based applications because each one might allocate an extra 128MB of RAM if needed.
+
+2. NxCore Status message - NxCORESTATUS_TAPEOPEN.
+
+   This call was actually added in the OSI update release but wasn't in the release notes in 
+   the v2.6 folder. This gives you the opportunity to trigger as soon as the tape has been opened
+   allowing you to pull data like the tape version.
+
+Fixed Bugs
+==========
+1. State Files - NxCoreAccess no longer needed process state files generated from real-time stream
+
+   Previously, if you had generated a state file based off the real-time stream, you needed
+   to have NxCoreAccess running to process those files in historic mode. This is no longer
+   necessary. You should now be able to run all State Files without NxCoreAccess regardless
+   of whether or not the state file was generated off of real-time or historic sources.
+
+2. ExgQuote/MMQuote Processing - Potential overflow in AskPriceChange should now be caught
+
+   We added in code to check and see if an AskPriceChange might be so large as to not accurately
+   fit into the allotted data type (signed int). If this occurs, we will catch it and move the
+   PriceType to a value that will accommodate it. This may result in loss of precision based on
+   how far away from maximum value the original PriceTypeChange value is in relationship to it's original
+   PriceType. This happens because we need to shift the original value so that it will be accurately
+   represented in the new PriceType. For more information, refer to the API documentation on rounding
+   when dealing with conversions between different NxPriceType values:
+
+   http://www.nxcoreapi.com/doc/concept_Prices.html (Rounding Issues)
+
+3. Windows Network Tape Processing - Processing will now continue after a network interruption
+                                     while processing data over remote Windows network location
+
+   If you are processing tapes stored on a remote Windows file store using windows networking,
+   NxCoreAPI now handles re-connecting after the network has been re-established.  Previously,
+   it might have resulted in your application having to start processing again. Now it will
+   send an error "64" withe code WAITFORACCESS, reconnect and and continue processing.
+   Testing was done using both mapped network drives and using the direct network path.

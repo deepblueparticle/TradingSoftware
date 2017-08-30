@@ -1,0 +1,7 @@
+// The configured CMake options and settings
+/* clang-format off */
+#define algoengine_backend_VERSION_MAJOR @algoengine_backend_VERSION_MAJOR@
+#define algoengine_backend_VERSION_MINOR @algoengine_backend_VERSION_MINOR@
+#define algoengine_backend_VERSION_BUILD @algoengine_backend_VERSION_BUILD@
+#define NANEX_LIB "@NANEX_LIB_PATH@/libnx.so"
+/* clang-format on */

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewAlgoDialog</class>
+ <widget class="QDialog" name="NewAlgoDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>647</width>
+    <height>263</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>New Strategy</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>621</width>
+     <height>157</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Parameters</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEditPointA"/>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="lineEditBaseVal"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Prev Close</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="4">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>CP1 %</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Base Val</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Point B %</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEditPrevClose"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEditCp2"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Point A %</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QLineEdit" name="lineEditEntryPrice"/>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="lineEditPointB"/>
+    </item>
+    <item row="1" column="5">
+     <widget class="QLineEdit" name="lineEditCP1"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>CP2 %</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>Loss %</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Entry Price</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLineEdit" name="lineEditProfit"/>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Profit %</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEditStartTime"/>
+    </item>
+    <item row="4" column="3">
+     <widget class="QLineEdit" name="lineEditEndTime"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>Start Time</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QLabel" name="label_15">
+      <property name="text">
+       <string>End Time</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QLineEdit" name="lineEdiLoss"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEditQty"/>
+    </item>
+    <item row="3" column="4">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>Tolerance</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QLineEdit" name="lineEditTolerance"/>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLineEdit" name="lineEditMaxQty"/>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLabel" name="label_17">
+      <property name="text">
+       <string>Max Qty</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_16">
+      <property name="text">
+       <string>Qty</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QLineEdit" name="lineEditCancelTicks"/>
+    </item>
+    <item row="4" column="4">
+     <widget class="QLabel" name="label_18">
+      <property name="text">
+       <string>Cancel Ticks</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>621</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QPushButton" name="pushButtonCancel">
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>27</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButtonClearAll">
+      <property name="text">
+       <string>Claer All</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>27</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButtonAdd">
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>621</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Instrument Name</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditInstrumentName">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Tick Size</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditTickSize">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Mode</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="comboBox">
+      <item>
+       <property name="text">
+        <string>BUY</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>SELL</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>lineEditPrevClose</tabstop>
+  <tabstop>lineEditBaseVal</tabstop>
+  <tabstop>lineEditEntryPrice</tabstop>
+  <tabstop>lineEditPointA</tabstop>
+  <tabstop>lineEditPointB</tabstop>
+  <tabstop>lineEditCP1</tabstop>
+  <tabstop>lineEditCp2</tabstop>
+  <tabstop>lineEditProfit</tabstop>
+  <tabstop>lineEdiLoss</tabstop>
+  <tabstop>lineEditQty</tabstop>
+  <tabstop>lineEditMaxQty</tabstop>
+  <tabstop>lineEditTolerance</tabstop>
+  <tabstop>lineEditStartTime</tabstop>
+  <tabstop>lineEditEndTime</tabstop>
+  <tabstop>pushButtonAdd</tabstop>
+  <tabstop>pushButtonClearAll</tabstop>
+  <tabstop>pushButtonCancel</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEditTickSize</tabstop>
+  <tabstop>lineEditInstrumentName</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButtonCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>NewAlgoDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

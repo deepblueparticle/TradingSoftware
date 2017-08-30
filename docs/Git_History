@@ -1,0 +1,47 @@
+commit d7fe8169bc0b8aee146fe2ebdf988b68ca8bba44
+Author: abhipr1 <abhishekanand149@gmail.com>
+Date:   Tue Aug 25 08:22:22 2015 +0800
+
+    All issues fixed except trailing stopdoes not work.
+
+commit aed4c9feffd4543c9704303c5bd0357c39972591
+Author: Divya <divya@divya.VM>
+Date:   Mon Aug 10 11:35:54 2015 +0800
+
+    Fixed Cancel Point 2 bug. Now I will cancel open orders if it reached cancel point 2.
+
+commit d7f60a10e5afc5c2c9ba4eec2f34ae9ab6156f01
+Author: Divya <divya@divya.VM>
+Date:   Sun Aug 2 22:17:09 2015 +0800
+
+    Stop strategy if Point A reached before it starts.
+
+commit d9b8bf07f7ee66999f690885201dad367dfd6c08
+Author: Divya <divya@divya.VM>
+Date:   Thu Jul 16 17:35:14 2015 +0800
+
+    Fixed all crashes points.
+
+commit e08700c02bc4f010e8a7f73e896ba3bd879cb489
+Author: Divya <divya@divya.VM>
+Date:   Thu Jul 16 14:27:42 2015 +0800
+
+    Still crashing
+
+commit 4082856286078112760568bc813ee6c07cec3227
+Author: Divya <divya@divya.VM>
+Date:   Wed Jul 15 01:21:10 2015 +0800
+
+    Fixed log crash issue.
+
+commit 78ab34472baff01d9ee568f26b7c8e0d3932c94a
+Author: Divya <divya@divya.VM>
+Date:   Sun Jul 12 19:40:35 2015 +0800
+
+    Added Alert message to back-end.
+
+commit 7d5e3c0600502c5af478d9096d9a34e37f365c21
+Author: Divya <divya@divya.VM>
+Date:   Wed Jul 1 21:58:24 2015 +0800
+
+    first commit
